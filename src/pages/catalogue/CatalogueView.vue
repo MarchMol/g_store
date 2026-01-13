@@ -8,8 +8,9 @@ import { getCategories, getProducts } from '@/services/products.api';
 import type { Product } from '@/schemas/product.schema';
 import ProductGrid from '@/components/ProductGrid.vue';
 import Closable from '@/components/Closable.vue';
+import { useRouter } from 'vue-router';
 // Constants
-
+const router = useRouter()
 const loading = ref(true)
 const errors = ref(null)
 const search_term = ref<string>('')
@@ -70,6 +71,13 @@ const handleAddFilter = (value: string) => {
 const handleRemoveFilter = () =>{
     filter.value = ''
 }
+
+const handleClickProduct = (id: number) => {
+    router.push({
+        name: 'product-detail',
+        params: {id: id}
+    })
+}
 </script>
 
 <template>
@@ -83,8 +91,7 @@ const handleRemoveFilter = () =>{
             </span>
             
         </div>
-        <ProductGrid :products="current_products" @add="onAdd"/>
-        {{ search_term }}
+        <ProductGrid :products="current_products" @add="onAdd" @detail="handleClickProduct"/>
         <router-view/>
 
     </div>

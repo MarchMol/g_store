@@ -12,9 +12,10 @@ const router = createRouter({
 
     // Product Detail
         {
-      path: '/product-detail',
+      path: '/product-detail/:id',
       name: 'product-detail',
-      component: () => import('@/pages/catalogue/CatalogueView.vue')
+      component: () => import('@/pages/prod_detail/ProdDetailView.vue'),
+      props: true
     },
 
     // Shopping Cart

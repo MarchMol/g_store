@@ -2,7 +2,7 @@
 import type {Product} from '@/schemas/product.schema';
 import 'primeicons/primeicons.css'
 
-const emit = defineEmits(['add'])
+const emit = defineEmits(['add', 'detail'])
 // Props
 const props = defineProps<{
   products: Product[]
@@ -11,11 +11,15 @@ const props = defineProps<{
 const handleAdd=(id: number) => {
     emit('add', id)
 }
+
+const handleDetail = (id:number) => {
+    emit('detail', id)
+}
 </script>
 
 <template>
     <div class="grid-container">
-        <div v-for="p in products" :key="p.id" class="product">
+        <div v-for="p in products" :key="p.id" class="product" @click="handleDetail(p.id)">
             <img class="prod-image" :src="p.image"/>
             <p>{{ p.title }}</p>
             <p>${{ p.price }}</p>
