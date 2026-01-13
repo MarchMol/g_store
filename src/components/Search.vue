@@ -2,12 +2,19 @@
         import 'primeicons/primeicons.css'
 import { ref } from "vue"
 
-const text = ref("")
+const props = defineProps<{
+    modelValue: string
+}>()
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: string): void
+}>()
 </script>
 
 <template>
     <div class="search">
-      <input class="t-input" v-model="text" type="text" />
+      <input class="t-input" :value="props.modelValue" type="text" 
+      @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"/>
       <i class="pi pi-search"></i>
     </div>
     <!-- <p>You typed: {{ text }}</p> -->

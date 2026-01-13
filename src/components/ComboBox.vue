@@ -1,15 +1,27 @@
 <script setup lang="ts">
-    const props = defineProps<{
+import 'primeicons/primeicons.css'
+import { ref } from 'vue';
+
+// Props
+const props = defineProps<{
   title: string
   icon: string
   options: string[]
 }>()
-    import 'primeicons/primeicons.css'
-import { ref } from 'vue';
-    const is_clicked = ref(false);
 
+// emits
+const emit = defineEmits(['onSelect'])
+
+// Constants
+const is_clicked = ref(false);
+
+// Handles
 const handleClick = () =>{
     is_clicked.value = !is_clicked.value
+}
+const handleSelect = (value: string) => {
+    is_clicked.value = false
+    emit('onSelect', value)
 }
 </script>
 
@@ -19,7 +31,7 @@ const handleClick = () =>{
         <i v-show=props.icon class="pi" :class="props.icon"></i>
     </div>
     <div v-if="is_clicked" class="option-container">
-        <div class="option" v-for="value in options">{{ value }}</div>
+        <div class="option" v-for="value in options" :key="value" @click="handleSelect(value)">{{ value }}</div>
     </div>
 
 </template>
@@ -44,8 +56,13 @@ const handleClick = () =>{
     position: absolute;
     background-color: var(--color-gray);
     padding: 0.5rem;
+    z-index: 100;
+    box-shadow: 0px 4px 10px -4px rgba(0,0,0,0.53);
 }
 .option{
-    border-bottom:  solid 1px black;
+    padding: 0.2rem;
+}
+.option:hover{
+    background-color: var(--color-dark-gray);
 }
 </style>
