@@ -1,19 +1,32 @@
 <script setup lang="ts">
     import 'primeicons/primeicons.css'
+import { useRouter } from 'vue-router';
+
+    const router = useRouter()
+    const handleOpenCart = () => {
+        router.push('/cart')
+    }
+    const handleOpenCatalogue = () => {
+        router.push('/')
+    }
+
+    const handleOpenAbout = () => {
+        router.push('/about')
+    }
 </script>
 
 <template>
     <div class="navbar">
         <img src="@/assets/icons/logo.svg" alt="Banner" id="logo"/>
         <div class="nb-options">
-            <div>
+            <div @click="handleOpenCatalogue">
                 Catalogue 
             </div>
-            <div>
+            <div @click="handleOpenAbout">
             About Us 
             </div>
         </div>
-        <i class="pi pi-shopping-cart" style="color: black">
+        <i class="pi pi-shopping-cart" style="color: black" @click="handleOpenCart">
         </i>
     </div>
 </template>

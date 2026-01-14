@@ -1,4 +1,4 @@
-import { ProductsSchema } from "@/schemas/product.schema"
+import { ProductSchema, ProductsSchema } from "@/schemas/product.schema"
 
 export async function getProducts() {
     const res = await fetch("https://fakestoreapi.com/products")
@@ -14,4 +14,10 @@ export async function  getCategories(){
     ...new Set(parsed.map(p => p.category))
     ]
     return cats
+}
+
+export async function getSingle(id: number) {
+    const res = await fetch(`https://fakestoreapi.com/products/${id}`)
+    const data = await res.json()
+    return ProductSchema.parse(data)
 }
