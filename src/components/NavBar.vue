@@ -16,14 +16,14 @@ import { useRouter } from 'vue-router';
 </script>
 
 <template>
-    <div class="navbar">
-        <img src="@/assets/icons/logo.svg" alt="Banner" id="logo"/>
+    <div class="flex items-center justify-between px-10 py-2 shadow-lg">
+        <img src="@/assets/icons/logo.svg" alt="Banner" class="h-20 py-2"/>
         <div class="nb-options">
-            <div @click="handleOpenCatalogue">
+            <div @click="handleOpenCatalogue" class="p-1 border-b-4 border-white hover:border-[var(--color-primary)]">
                 Catalogue 
             </div>
-            <div @click="handleOpenAbout">
-            About Us 
+            <div @click="handleOpenAbout" class="p-1 border-b-4 border-white hover:border-[var(--color-primary)]">
+                About Us 
             </div>
         </div>
         <i class="pi pi-shopping-cart" style="color: black" @click="handleOpenCart">

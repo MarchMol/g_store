@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import 'primeicons/primeicons.css'
 import NavBar from '@/components/NavBar.vue';
 import type { CartItem } from '@/schemas/product.schema';
 import { onMounted, ref } from 'vue';
@@ -14,7 +15,6 @@ onMounted(() =>{
             cart.value = []
         }
     }
-
     price.value = cart.value.reduce((acc,item) => 
       acc + item.price, 0
     ) 
@@ -32,9 +32,10 @@ onMounted(() =>{
       <img class="entry-image" :src="value.image">
       <p>{{ value.title }}</p>
       <p>${{ value.price }}</p>
-      <button>-</button>
+      <i class="pi pi-plus"></i>
       <p>{{ value.count }}</p>
-      <button>+</button>
+      <i class="pi pi-minus"></i>
+      <i class="pi pi-trash"></i>
     </div>
     <h2>Total: ${{price }}</h2>
     <button>Proceder a la Compra</button>

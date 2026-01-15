@@ -18,56 +18,23 @@ const handleDetail = (id:number) => {
 </script>
 
 <template>
-    <div class="grid-container">
-        <div v-for="p in products" :key="p.id" class="product" @click="handleDetail(p.id)">
-            <img class="prod-image" :src="p.image"/>
-            <p>{{ p.title }}</p>
-            <p>${{ p.price }}</p>
-            <div class="add" @click="handleAdd(p.id)">
+    <div class="flex gap-4 w-full h-80 overflow-x-auto px-[3rem]">
+        <div v-for="p in products" :key="p.id" @click="handleDetail(p.id)"
+            class="relative flex flex-col justify-center bg-[var(--color-gray)] min-w-60 max-w-60 min-h-70 max-h-70 p-8 rounded-lg shadow-lg gap-[2rem]"
+        >
+            <div @click="handleAdd(p.id)" class="absolute bg-[var(--color-dark-gray)] w-6 h-6 p-2 rounded-4xl flex items-center justify-center top-4 right-4 hover:h-10 hover:w-10 transition-all duration-150 cursor-pointer">
                 <i class="pi pi-plus"></i>
+            </div>
+            <div class="absolute bg-[var(--color-primary)] h-25 w-60 left-0 bottom-0 rounded-b-lg z-[1] "></div>
+            <img :src="p.image" class="max-h-36 max-w-fill object-contain"/>
+            <div class="flex flex-col bg-[var(--color-primary)] z-[1]">
+                <p class="w-10 min-w-[200px] min-h-[1.25rem] truncate text-white font-medium pb-[0.2rem]">{{ p.title }}</p>
+                <p class="text-white font-bold">${{ p.price }}</p>
             </div>
         </div>
     </div>
 </template>
 
 <style scoped>
-.grid-container {
-    display: flex;
-    gap: 1rem;
-    width: 100vw;
-    overflow-x: auto;
-}
 
-.product {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background-color: var(--color-gray);
-    min-height: 15rem;
-    min-width: 12rem;
-    max-height: 15rem;
-    max-width: 12rem;
-    padding: 2rem;
-    border-radius: 1rem;
-    box-shadow: 0px 4px 10px -4px rgba(0,0,0,0.53);
-}
-
-.prod-image {
-    max-height: 9rem;
-    max-width: 9rem;
-    object-fit: contain;
-}
-
-.add {
-    position: absolute;
-    background-color:  var(--color-dark-gray);
-    width: 1.2rem;
-    height: 1.2rem;
-    padding: 0.5rem;
-    border-radius: 2rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 </style>
