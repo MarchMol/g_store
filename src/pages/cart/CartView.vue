@@ -1,60 +1,75 @@
 <script setup lang="ts">
+  import 'primeicons/primeicons.css'
 import NavBar from '@/components/NavBar.vue';
 import type { CartItem } from '@/schemas/product.schema';
 import { onMounted, ref } from 'vue';
+import AmountCustom from '@/components/AmountCustom.vue';
+import Button from '@/components/Button.vue';
+import { useRouter } from 'vue-router';
 const cart = ref<CartItem[]>([])
+const og_cart = ref<CartItem[]>([])
 const price = ref(0)
+const router = useRouter()
 
 onMounted(() =>{
     const savedCart = localStorage.getItem("gstore:cart")
     if (savedCart) {
         try{
             cart.value = JSON.parse(savedCart)
+            og_cart.value = JSON.parse(savedCart)
         } catch(err) {
             cart.value = []
         }
     }
-
     price.value = cart.value.reduce((acc,item) => 
       acc + item.price, 0
     ) 
 })
+
+const handleExit = () => {
+  const str_cart_mod = JSON.stringify(cart.value)
+  const str_cart_og = JSON.stringify(og_cart.value)
+  if (str_cart_mod !== str_cart_og) {
+    const confirmed = confirm("Do you want to save changes?")
+    if (confirmed) {
+      localStorage.setItem(
+        "gstore:cart",
+        str_cart_mod
+      )
+    } else {
+      router.push('/')
+    }
+  } else {
+    router.push('/')
+  }
+  
+}
 </script>
 
 <template>
   <NavBar/>
-    <div class="table-titles">
-      <p>Producto</p>
-      <p>Precio</p>
-      <p>Cantidad</p>
+    <div class="flex justify-around border-b border-[var(--color-gray)] py-[1rem]">
+      <p>Product</p>
+      <p>Price</p>
+      <p>Quantity</p>
     </div>
-    <div class="entry" v-for="value in cart">
-      <img class="entry-image" :src="value.image">
-      <p>{{ value.title }}</p>
+    <div class="flex justify-around p-[1rem] items-center" v-for="value in cart">
+      <!-- Product -->
+      <div class="flex max-w-[200px] gap-[1rem]">
+        <img class="max-w-[4rem]" :src="value.image">
+        <p>{{ value.title }}</p>
+      </div>
+      <!-- Price -->
       <p>${{ value.price }}</p>
-      <button>-</button>
+      <!-- <i class="pi pi-plus"></i>
       <p>{{ value.count }}</p>
-      <button>+</button>
+      <i class="pi pi-minus"></i>
+      <i class="pi pi-trash"></i> -->
+      <AmountCustom v-model="value.count"/>
     </div>
-    <h2>Total: ${{price }}</h2>
-    <button>Proceder a la Compra</button>
+    <div class="flex flex-col justify-center items-center w-full">
+        <p class="w">Total: ${{price }}</p>
+        <Button title="Finish Shopping" @click="handleExit"/>
+    </div>
+
 </template>
-
-<style scoped>
-
-.table-titles {
-  display: flex;
-  justify-content: space-around;
-  border-bottom: solid 1px var(--color-dark-gray);
-}
-
-.entry {
-  display: flex;
-  justify-content: space-around;
-  padding: 1rem;
-}
-
-.entry-image {
-  max-height: 4rem;
-}
-</style>
