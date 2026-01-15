@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import NavBar from '@/components/NavBar.vue';
+import { getCartSize } from '@/services/cart.storage';
 
 </script>
 
 <template>
-    <NavBar/>
+    <NavBar :cart-amount="getCartSize()"/>
     <h1 class="text-4xl p-[2rem]">About Us</h1>
     <!-- Text -->
     <div class="flex px-[3rem] gap-[1rem] flex-col">

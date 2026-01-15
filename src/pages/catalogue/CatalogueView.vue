@@ -4,11 +4,12 @@ import ComboBox from '@/components/ComboBox.vue';
 import NavBar from '@/components/NavBar.vue';
 import Search from '@/components/Search.vue';
 import { ref, onMounted, watch } from 'vue'
-import { getCategories, getProducts, getSingle } from '@/services/products.api';
-import { newCartItem, type CartItem, type Product } from '@/schemas/product.schema';
+import { getCategories, getProducts } from '@/services/products.api';
+import {type CartItem, type Product } from '@/schemas/product.schema';
 import ProductGrid from '@/components/ProductGrid.vue';
 import Closable from '@/components/Closable.vue';
 import { useRouter } from 'vue-router';
+import { decreaseCartItem, getCartItems, getCartSize, increaseCartItem } from '@/services/cart.storage';
 
 // Constants
 const router = useRouter()
@@ -20,47 +21,26 @@ const current_products = ref<Product[]>([])
 const filter = ref<string>('')
 const categories = ref<string[]>([])
 const cart = ref<CartItem[]>([])
+const cart_amount = ref(0)
 
-const onAdd = async (id: number) => {
-    var exists = false
-    cart.value.forEach((item: CartItem) =>{
-        if (item.id === id){
-            item.count += 1
-            exists = true
-        }
-    })
 
-    if (!exists) {
-        try{
-            const prod = await getSingle(id)
-            const cart_item = newCartItem(prod, 1)
-            cart.value.push(cart_item)
-        } catch (err){
-            console.log(err)
-        }
-    }
-
-    localStorage.setItem(
-        'gstore:cart',
-        JSON.stringify(
-            cart.value
-        )  
-    )
+const handleAddItem = async (id: number) => {
+    await increaseCartItem(id)
+    cart.value = getCartItems()
+    cart_amount.value = getCartSize()
 }
 
-const loadCart = () => {
-    const savedCart = localStorage.getItem("gstore:cart")
-    if (savedCart) {
-        try{
-            cart.value = JSON.parse(savedCart)
-        } catch(err) {
-            cart.value = []
-        }
-        
-    }
+const handleRemoveItem = (id: number) => {
+    decreaseCartItem(id)
+    cart.value = getCartItems()
+    cart_amount.value = getCartSize()
 }
+
+
 onMounted(async ()=>{
-    loadCart()
+    cart.value = getCartItems()
+    cart_amount.value = getCartSize()
+    console.log(cart_amount.value)
     try {
         all_products.value = await getProducts()
         current_products.value = JSON.parse(
@@ -118,7 +98,7 @@ const handleClickProduct = (id: number) => {
 
 <template>
     <div>
-        <NavBar/>
+        <NavBar :cart-amount="cart_amount"/>
         <div class="px-20 py-5 w-fit h-full flex gap-20 justify-between">
             <Search v-model="search_term"/>
             <ComboBox title="Filter" icon="pi pi-filter" :options="categories" @on-select="handleAddFilter"/>
@@ -126,7 +106,7 @@ const handleClickProduct = (id: number) => {
                 <Closable :title="filter" @close="handleRemoveFilter"/>
             </span>
         </div>
-        <ProductGrid :products="current_products" @add="onAdd" @detail="handleClickProduct"/>
+        <ProductGrid :products="current_products" @add="handleAddItem" @sub="handleRemoveItem" @detail="handleClickProduct"/>
         <router-view/>
     </div>
 </template>

@@ -6,21 +6,16 @@ import { onMounted, ref } from 'vue';
 import AmountCustom from '@/components/AmountCustom.vue';
 import Button from '@/components/Button.vue';
 import { useRouter } from 'vue-router';
+import { getCartItems, getCartSize } from '@/services/cart.storage';
 const cart = ref<CartItem[]>([])
 const og_cart = ref<CartItem[]>([])
 const price = ref(0)
 const router = useRouter()
+const cart_amount = ref(0)
 
 onMounted(() =>{
-    const savedCart = localStorage.getItem("gstore:cart")
-    if (savedCart) {
-        try{
-            cart.value = JSON.parse(savedCart)
-            og_cart.value = JSON.parse(savedCart)
-        } catch(err) {
-            cart.value = []
-        }
-    }
+    cart.value = getCartItems()
+    cart_amount.value = cart.value.length
     price.value = cart.value.reduce((acc,item) => 
       acc + item.price, 0
     ) 
@@ -47,7 +42,7 @@ const handleExit = () => {
 </script>
 
 <template>
-  <NavBar/>
+  <NavBar :cart-amount="cart_amount"/>
     <div class="flex justify-around border-b border-[var(--color-gray)] py-[1rem]">
       <p>Product</p>
       <p>Price</p>

@@ -2,6 +2,9 @@
     import 'primeicons/primeicons.css'
 import { useRouter } from 'vue-router';
 import CartButton from './CartButton.vue';
+const props = defineProps<{
+    cartAmount: number
+}>()
 
     const router = useRouter()
     const handleOpenCart = () => {
@@ -27,7 +30,7 @@ import CartButton from './CartButton.vue';
                 About Us 
             </div>
         </div>
-        <CartButton  @click="handleOpenCart"/>
+        <CartButton :cart-amount="cartAmount"  @click="handleOpenCart"/>
 
 
     </div>

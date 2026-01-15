@@ -36,6 +36,8 @@ const handleSelect = (value: string) => {
             bg-[var(--color-gray)] shadow-lg 
             hover:bg-[var(--color-primary)] transition-all duration-200
             hover:text-white hover:border-white
+            text-[var(--color-dark-gray)]
+            gap-[0.5rem]
         ">
             <div>{{ props.title }}</div>
             <i v-show=props.icon class="pi" :class="props.icon"></i>

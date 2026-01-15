@@ -17,8 +17,8 @@ const emit = defineEmits<{
         rounded-xl w-fit bg-[var(--color-gray)] shadow-lg
         flex items-center
     ">
-        <input class="t-input" :value="props.modelValue" type="text"
-            @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)" />
+        <input class="pl-[0.8rem]" :value="props.modelValue" type="text"
+            @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)" placeholder="Something nice..."/>
         <i class="pi pi-search"></i>
     </div>
     <!-- <p>You typed: {{ text }}</p> -->
