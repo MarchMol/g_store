@@ -17,12 +17,14 @@ const cart_amount = ref(0)
 const add_to_cart = ref(false)
 
 const handleAddToCart = () =>{
-    if (!add_to_cart.value) {
+    if(prod_amount.value > 0){
+            if (!add_to_cart.value) {
             add_to_cart.value= true
     const id = prod.value ? prod.value.id : 0
     rewriteCartItem(id, prod_amount.value)
     } else {
         router.push('/')
+    }
     }
 }
 
@@ -31,6 +33,9 @@ onMounted(async () => {
     try {
         prod.value = await getSingle(Number(route.params.id))
         prod_amount.value = getItemCount(prod.value.id)
+        if(prod_amount.value == 0){
+            prod_amount.value = 1
+        }
         rate.value = prod.value.rating.rate
     } catch (err) {
         console.log(err)
@@ -62,21 +67,35 @@ const handleReturn = () => {
 <template>
     <NavBar :cart-amount="cart_amount" />
     <div class="flex flex-col pb-[2rem]">
-        <div class="pl-[2rem] pt-[1rem] text-[1.5rem]">
+          <div class="pl-[2rem] pt-[2rem] text-[1.5rem] text-[var(--color-dark-gray)] cursor-pointer">
             <i class="pi pi-angle-left" @click="handleReturn"></i>
         </div>
-        <div class="flex flex-col items-center gap-[1rem]">
+        <div class="
+        flex 
+        flex-col 
+        items-center gap-[1rem]
+        
+        ">
             <div class="
                 flex justify-center items-center p-[2rem]
+                flex-col
+                sm:flex-row
+                
             ">
                 <!-- image container -->
-                <div class="h-[20rem] w-[20rem]">
+                <div class="h-[20rem] 
+                w-[20rem]
+                lg:w-[40rem]
+                ">
                     <img :src="prod?.image"
                         class="max-h-[20rem] min-h-[20rem] max-w-[20rem] min-w-[20rem] object-contain" />
                 </div>
 
                 <!-- Body and info -->
-                <div class="flex flex-col gap-[1rem] pt-[2rem]">
+                <div class="flex flex-col gap-[1rem] pt-[2rem] 
+                items-center
+                sm:items-start
+                ">
                     <h1 class="text-xl font-medium">{{ prod?.title }}</h1>
                     <!-- Rating -->
                     <div class="flex">
@@ -93,7 +112,7 @@ const handleReturn = () => {
                     <!-- Price and Quantity -->
                     <div class="
                     flex justify-around pt-[1rem]
-                    items-center 
+                    items-center gap-[4rem]
                     ">
                         <p class="text-xl">${{ prod?.price }}</p>
                         <AmountCustom :count="prod_amount" @add="handleAdd" @sub="handleSub" />
@@ -104,11 +123,12 @@ const handleReturn = () => {
 
             <!-- Add to Cart -->
             <div class="
-                bg-[var(--color-primary)] text-white py-[1rem] px-[2rem]
+                 text-white py-[1rem] px-[2rem]
                 h-[3.5rem] w-[12rem]
                 rounded-md shadow-lg font-medium cursor-pointer
                 relative 
                 "
+                :class="(prod_amount >0) ? ['bg-[var(--color-primary)]']: ['bg-[var(--color-darker-gray)]']"
                 @click="handleAddToCart"
             >
                 <Transition name="slide"
@@ -134,7 +154,7 @@ const handleReturn = () => {
                 " key="b">
                 <div></div>
                     <i class="pi pi-check-circle text-xl"></i>
-                    <p>Keep Buying</p>
+                    <p>Back to Store</p>
                 </div>
                 </Transition>
             </div>

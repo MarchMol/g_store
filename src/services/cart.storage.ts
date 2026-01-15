@@ -69,13 +69,21 @@ export async function increaseCartItem(id: number) {
 
 export function decreaseCartItem(id:number) {
     const cart = getCartItems()
+    var is_empty = false
     cart.forEach((element: CartItem) =>{
         if (element.id === id){
             if(element.count>=1){
                 element.count -= 1
+                if(element.count ==0){
+                    is_empty=true
+                }
             }
         }
     })
+
+    if (is_empty){
+        removeFromCart(id)
+    }
 
     localStorage.setItem(
         'gstore:cart',
@@ -119,3 +127,13 @@ export function getItemCount(id:number):number {
     return item ? item.count : 0
 }
 
+export function removeFromCart(id:number) {
+    const cart = getCartItems()
+    const filtered = cart.filter(o => o.id!== id)
+        localStorage.setItem(
+        'gstore:cart',
+        JSON.stringify(
+            filtered
+        )  
+    )
+}

@@ -99,14 +99,28 @@ const handleClickProduct = (id: number) => {
 <template>
     <div>
         <NavBar :cart-amount="cart_amount"/>
-        <div class="px-20 py-5 w-fit h-full flex gap-20 justify-between">
+        <div class="
+        flex
+
+        pt-[2rem]
+        pb-[1.5rem]
+        justify-center
+        items-center
+        gap-[1rem]
+        ">
             <Search v-model="search_term"/>
             <ComboBox title="Filter" icon="pi pi-filter" :options="categories" @on-select="handleAddFilter"/>
-            <span v-show="filter.length > 0">
-                <Closable :title="filter" @close="handleRemoveFilter"/>
-            </span>
         </div>
-        <ProductGrid :products="current_products" @add="handleAddItem" @sub="handleRemoveItem" @detail="handleClickProduct"/>
+        <div v-if="filter.length > 0"
+            class="
+            flex justify-center pb-[2rem]
+            ">
+            <Closable :title="filter" @close="handleRemoveFilter"/>
+        </div>
+        <div class="flex justify-center">
+<ProductGrid :products="current_products" @add="handleAddItem" @sub="handleRemoveItem" @detail="handleClickProduct"/>
+        </div>
+        
         <router-view/>
     </div>
 </template>
