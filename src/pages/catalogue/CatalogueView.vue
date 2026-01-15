@@ -130,6 +130,3 @@ const handleClickProduct = (id: number) => {
         <router-view/>
     </div>
 </template>
-
-<style scoped>
-</style>
