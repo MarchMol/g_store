@@ -31,28 +31,34 @@ const handleSelect = (value: string) => {
 
 <template>
     <div class="relative">
-        <div @click="handleClick" class="
-            relative flex items-center p-2 border border-[var(--color-dark-gray)] rounded-xl 
-            bg-[var(--color-gray)] shadow-lg 
-            hover:bg-[var(--color-primary)] transition-all duration-200
-            hover:text-white hover:border-white
-        ">
-            <div>{{ props.title }}</div>
-            <i v-show=props.icon class="pi" :class="props.icon"></i>
-        </div>
+<div @click="handleClick" class="
+    relative flex items-center p-2 border border-[var(--color-dark-gray)] rounded-xl 
+    bg-[var(--color-gray)] shadow-lg 
+    hover:bg-[var(--color-primary)] transition-all duration-200
+    hover:text-white hover:border-white
+    text-[var(--color-dark-gray)]
+    gap-[0.5rem]
+">
+    <div class="hidden sm:block">{{ props.title }}</div>
+    <i v-show="props.icon" class="pi" :class="props.icon"></i>
+</div>
 
         <!-- Options Container -->
         <div v-show="is_clicked" 
         
         class="
-            absolute bg-[var(--color-gray)] p-[1rem] z-[100] shadow-xl
-            right-0 top flex flex-col gap-[0.5rem]
+            absolute bg-[var(--color-gray)] p-[1rem] z-[100] shadow-2xl
+            right-0 top flex flex-col gap-[0.5rem] border
+            border-[var(--color-darker-gray)]
+            rounded-lg
         ">
-        <div v-click-outside="handleClose">
+        <div v-click-outside="handleClose" class="">
             <!-- Options -->
             <div v-for="value in options" :key="value" @click="handleSelect(value)"
-                class="border-b border-[var(--color-dark-gray)] cursor-pointer whitespace-nowrap">
-                {{ value }}
+                class="border-b border-[var(--color-dark-gray)] cursor-pointer whitespace-nowrap
+                text-[var(--color-darker-gray)]
+                ">
+                {{ value[0]?.toUpperCase() +value.slice(1)}}
             </div>
         </div>
             

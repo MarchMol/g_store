@@ -1,21 +1,18 @@
 <script setup lang="ts">
 const props = defineProps<{
-    modelValue: number
+    count: number
 }>()
 
-const emit = defineEmits<{
-    (e: 'update:modelValue', value: number): void
-}>()
+const emit = defineEmits(['add', 'sub'])
 
 const handleAdd = () => {
-    emit('update:modelValue', props.modelValue+1)
+    emit('add')
 }
 
 const handleSubtract = () => {
-    if (props.modelValue >0) {
-        emit('update:modelValue', props.modelValue-1)
+    if (props.count >0) {
+        emit('sub')
     }
-    
 }
 
 </script>
@@ -31,7 +28,7 @@ const handleSubtract = () => {
             @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)" /> -->
 
         <p>
-            {{ modelValue }}
+            {{ count }}
         </p>
         <div class="flex items-center text-[0.8rem] hover:bg-[var(--color-gray)] h-[1.25rem] w-[1rem] p-[0.5rem] rounded-md justify-center"
         @click="handleAdd"
