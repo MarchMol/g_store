@@ -24,7 +24,7 @@ const TestComponent = defineComponent({
 describe('clickOutside directive', () => {
     let wrapper: VueWrapper
     let target: HTMLElement
-    let outside: HTMLElement
+    let outside: HTMLElement 
 
     beforeEach(() => {
         wrapper = mount(TestComponent, {
@@ -90,7 +90,6 @@ describe('clickOutside directive', () => {
             }
         })
 
-        const box1 = multiWrapper.find('.box1').element as HTMLElement
         const outside = document.body
 
         outside.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }))

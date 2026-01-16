@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Product } from '@/schemas/product.schema';
-import { removeFromCart } from '@/services/cart.storage';
 import 'primeicons/primeicons.css'
 import { ref } from 'vue';
 

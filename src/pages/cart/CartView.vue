@@ -2,7 +2,7 @@
 import 'primeicons/primeicons.css'
 import NavBar from '@/components/NavBar.vue';
 import type { CartItem } from '@/schemas/product.schema';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import AmountCustom from '@/components/AmountCustom.vue';
 import { useRouter } from 'vue-router';
 import { decreaseCartItem, getCartItems, getCartSize, increaseCartItem, removeFromCart } from '@/services/cart.storage';

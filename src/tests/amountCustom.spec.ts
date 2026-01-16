@@ -40,7 +40,7 @@ describe('AmountCustom.vue', () => {
       }
     })
 
-    const addButton = wrapper.find('.pi-plus').element.parentElement
+
     await wrapper.find('.pi-plus').element.parentElement?.click()
 
     expect(wrapper.emitted('add')).toBeTruthy()
@@ -53,7 +53,6 @@ describe('AmountCustom.vue', () => {
       }
     })
 
-    const subButton = wrapper.find('.pi-minus').element.parentElement
     await wrapper.find('.pi-minus').element.parentElement?.click()
 
     expect(wrapper.emitted('sub')).toBeTruthy()
