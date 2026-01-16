@@ -90,7 +90,6 @@ describe('clickOutside directive', () => {
             }
         })
 
-        const box1 = multiWrapper.find('.box1').element as HTMLElement
         const outside = document.body
 
         outside.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true }))
