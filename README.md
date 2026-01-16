@@ -264,7 +264,251 @@ Automatically cleans up event listeners on unmount
 | `/cart` | cart | CartView | — |
 | `/about` | about | AboutView | — |
 
-🌐 External Resources
+## 🧪 Testing
+
+This project uses **Vitest** as the unit testing framework, optimized for Vue 3 and TypeScript environments. All tests are located in `src/tests/` and follow the `*.spec.ts` naming convention.
+
+### Setup
+
+#### Installation
+```
+npm install -D vitest @vitest/ui happy-dom @vue/test-utils @testing-library/vue
+```
+
+#### Configuration
+Create a `vitest.config.ts` file in the root directory of the project and put something like this
+```
+import { defineConfig } from 'vitest/config'
+import vue from '@vitejs/plugin-vue'
+import { fileURLToPath, URL } from 'node:url'
+
+export default defineConfig({
+  plugins: [vue()],
+  test: {
+    globals: true,
+    environment: 'happy-dom',
+    setupFiles: [],
+  },
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url))
+    }
+  }
+})
+```
+also add this in the package.json for the scripts
+```
+{
+  "scripts": {
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
+    "test:run": "vitest --run"
+  }
+}
+```
+
+### Running Tests
+- Watch mode (recommended for development)
+```
+npm run test
+```
+
+- UI dashboard (visual test interface)
+```
+npm run test:ui
+```
+
+- Single run (CI mode)
+```
+npm run test:run
+```
+
+- Specific test file
+```
+npm run test -- src/tests/cart.storage.spec.ts
+```
+
+- Tests matching pattern
+```
+npm run test -- --grep "getCartSize"
+```
+## Tests:
+
+### 1. Services Layer Tests 
+
+#### products.api.spec.ts
+
+**getProducts()** - Fetches all products from FakeStore API
+- Returns array of products on valid response
+- Throws ZodError on invalid product data
+- Throws error on network failure
+- Throws error on invalid JSON response
+- Calls correct API endpoint (https://fakestoreapi.com/products)
+- Handles empty product array
+
+**getCategories()** - Extracts and deduplicates unique product categories
+- Returns unique categories
+- Deduplicates categories correctly (Set-based)
+- Handles empty products array
+- Throws error on network failure
+- Throws ZodError on invalid data
+
+**getSingle(id)** - Fetches a single product by ID
+- Returns single product by id
+- Calls correct API endpoint with id parameter
+- Throws ZodError on invalid product data
+- Throws error on 404 response
+- Throws error on network failure
+- Handles different product ids
+
+#### cart.storage.spec.ts
+
+**getCartSize()** - Returns total quantity of all items in cart
+- Returns 0 for empty cart
+- Returns correct total quantity for single item
+- Returns correct total quantity for multiple items
+- Handles corrupted JSON gracefully
+- Handles empty string in localStorage
+
+**getCartItems()** - Retrieves cart items from localStorage
+- Returns empty array for empty cart
+- Returns valid cart items
+- Returns empty array for corrupted JSON
+- Returns empty array when localStorage key does not exist
+
+**increaseCartItem(id)** - Increments item quantity or creates new cart item
+- Increments count for existing item
+- Creates new item if not exists (async API call)
+- Handles API errors gracefully
+- Adds to empty cart
+
+**decreaseCartItem(id)** - Decrements item quantity
+- Decrements count for existing item
+- Does not decrement below 0
+- Ignores non-existent items
+
+**removeFromCart(id)** - Removes item completely from cart
+- Removes item from cart
+- Removes correct item with multiple items
+- Handles removing non-existent item
+- Clears cart when removing only item
+
+**rewriteCartItem(id, count)** - Updates item quantity or creates new item with specific count
+- Updates existing item count
+- Creates new item if not exists
+- Handles setting count to 0
+- Handles API errors gracefully
+
+**getItemCount(id)** - Returns quantity of specific item in cart
+- Returns correct count for existing item
+- Returns 0 for non-existent item
+- Returns 0 for empty cart
+- Returns correct count with multiple items
+
+### 2. Schemas Layer Tests
+
+#### product.schema.spec.ts
+
+**ProductRating** - Validates rating object with rate and count
+- Validates correct rating object
+- Rejects missing rate field
+- Rejects missing count field
+- Rejects non-numeric rate
+- Accepts zero values
+
+**ProductSchema** - Validates complete product object with all required fields
+- Validates correct product
+- Rejects missing id
+- Rejects missing title
+- Rejects missing price
+- Rejects missing description
+- Rejects missing category
+- Rejects invalid image URL
+- Rejects missing rating
+- Accepts valid URLs
+- Rejects non-string title
+- Rejects non-number price
+- Accepts zero price
+- Accepts negative price
+
+**CartItemSchema** - Validates cart item with id, title, price, image, and count
+- Validates correct cart item
+- Rejects missing id
+- Rejects missing title
+- Rejects missing price
+- Rejects missing image URL
+- Rejects invalid image URL
+- Rejects missing count
+- Rejects non-number count
+- Accepts zero count
+
+**ProductsSchema** - Validates array of products
+- Validates array of products
+- Validates empty array
+- Rejects invalid products in array
+- Rejects non-array input
+- Validates large product arrays
+
+**newCartItem(product, count)** - Transforms Product to CartItem with specified quantity
+- Creates valid cart item from product
+- Creates item with count of 1
+- Creates item with count of 0
+- Creates item with large count
+- Excludes description from cart item
+- Excludes rating from cart item
+- Excludes category from cart item
+- Returns CartItem type
+
+**Type inference** - Validates type inference from Zod schemas
+- Product type is correctly inferred
+- CartItem type is correctly inferred
+
+### 3. Directives Tests
+
+#### clickOutside.spec.ts
+
+**clickOutside** - Custom Vue directive for detecting clicks outside element
+- Mounts without errors
+- Cleans up event listener on unmount
+- Removes stored handler reference on unmount
+- Handles multiple directives on same page
+
+### 4. Components Tests
+
+#### amountCustom.spec.ts
+
+**AmountCustom** - Quantity selector component with increment/decrement buttons
+- Displays current count
+- Renders increment button
+- Renders decrement button
+- Emits add event when plus button clicked
+- Emits sub event when minus button clicked
+- Prevents subtraction when count is 0
+- Allows addition when count is 0
+- Handles large count values
+- Handles count of 1
+- Allows addition at count 1
+
+### 5. Pages Tests
+
+#### catalogueView.spec.ts
+
+**CatalogueView** - Main product listing page with search and filtering
+- Renders loading state initially
+- Loads products on mount
+
+## Test Statistics
+| Category | Files | Tests | Status |
+|----------|-------|-------|--------|
+| Services | 2 | 40+ | ✅ |
+| Schemas | 1 | 50+ | ✅ |
+| Directives | 1 | 5+ | ✅ |
+| Components | 1 | 10+ | ✅ |
+| Pages | 1 | 3+ | ✅ |
+| **Total** | **6** | **100+** | ✅ |
+
+## 🌐 External Resources
  - Icons
 <a href="https://primevue.org/icons/">PrimeIcons</a> - Comprehensive icon library
 
