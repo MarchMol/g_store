@@ -47,7 +47,6 @@ onMounted(async ()=>{
     loading.value=true
     cart.value = getCartItems()
     cart_amount.value = getCartSize()
-    console.log(cart_amount.value)
     try {
         all_products.value = await getProducts()
         current_products.value = JSON.parse(
