@@ -24,7 +24,6 @@ const TestComponent = defineComponent({
 describe('clickOutside directive', () => {
     let wrapper: VueWrapper
     let target: HTMLElement
-    let outside: HTMLElement 
 
     beforeEach(() => {
         wrapper = mount(TestComponent, {
@@ -35,7 +34,6 @@ describe('clickOutside directive', () => {
             }
         })
         target = wrapper.find('.target').element as HTMLElement
-        outside = wrapper.find('.outside').element as HTMLElement
     })
 
     it('mounts without errors', () => {
