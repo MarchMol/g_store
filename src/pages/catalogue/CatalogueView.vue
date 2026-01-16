@@ -9,12 +9,14 @@ import {type CartItem, type Product } from '@/schemas/product.schema';
 import ProductGrid from '@/components/ProductGrid.vue';
 import Closable from '@/components/Closable.vue';
 import { useRouter } from 'vue-router';
-import { decreaseCartItem, getCartItems, getCartSize, increaseCartItem } from '@/services/cart.storage';
+import { decreaseCartItem, getCartItems, getCartSize, getItemCount, increaseCartItem, removeFromCart } from '@/services/cart.storage';
+import Loading from '@/components/Loading.vue';
+import ErrorMsg from '@/components/ErrorMsg.vue';
 
 // Constants
 const router = useRouter()
 const loading = ref(true)
-const errors = ref(null)
+const errors = ref()
 const search_term = ref<string>('')
 const all_products = ref<Product[]>([])
 const current_products = ref<Product[]>([])
@@ -34,10 +36,15 @@ const handleRemoveItem = (id: number) => {
     decreaseCartItem(id)
     cart.value = getCartItems()
     cart_amount.value = getCartSize()
+    const count = getItemCount(id)
+    if (count == 0) {
+        removeFromCart(id)
+    }
 }
 
 
 onMounted(async ()=>{
+    loading.value=true
     cart.value = getCartItems()
     cart_amount.value = getCartSize()
     console.log(cart_amount.value)
@@ -48,9 +55,10 @@ onMounted(async ()=>{
         )
         categories.value = await getCategories()
     } catch (err) {
-
+        errors.value = err
+        loading.value = false
     } finally {
-
+        loading.value = false
     }
 })
 watch(filter, () => {
@@ -97,9 +105,16 @@ const handleClickProduct = (id: number) => {
 </script>
 
 <template>
-    <div>
-        <NavBar :cart-amount="cart_amount"/>
-        <div class="
+    <NavBar :cart-amount="cart_amount"/>
+    <div v-if="loading" class="flex justify-center text-4xl text-[var(--color-darker-gray)] pt-[2rem]">
+        <Loading />
+    </div>
+    <div v-else-if="errors" class="flex justify-center text-xl text-[var(--color-darker-gray)] pt-[2rem]">
+        <ErrorMsg/>
+    </div>
+    <div v-else>
+        <div  
+        class="
         flex
 
         pt-[2rem]

@@ -70,6 +70,7 @@ const handleReturn = () => {
   lg:flex
   lg:flex-col
   lg:pl-[calc((100vw-950px)/2)]
+  
   ">
           <div class="pl-[2rem] pt-[1rem] text-[1.5rem] text-[var(--color-dark-gray)] cursor-pointer">
             <i class="pi pi-angle-left" @click="handleReturn"></i>
@@ -123,7 +124,7 @@ const handleReturn = () => {
     Look for something great to buy :)
   </div>
 
-  <div v-if="cart.length>0" class="flex flex-col justify-center items-center w-full">
+  <div v-if="cart.length>0" class="flex flex-col justify-center items-center w-full pb-[2rem]">
     <p class=" pb-[2rem]">Total: ${{ price }}</p>
     <div @click="handleExit" class="
       bg-[var(--color-primary)] text-white py-[1rem] px-[2rem]

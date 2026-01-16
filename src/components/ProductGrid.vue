@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Product } from '@/schemas/product.schema';
+import { removeFromCart } from '@/services/cart.storage';
 import 'primeicons/primeicons.css'
 import { ref } from 'vue';
 
@@ -39,6 +40,7 @@ const handleSub = (id: number) => {
             if (element.count > 0) {
                 element.count -= 1
                 if (element.count == 0) {
+                    console.log("should delete")
                     existences.value.delete(id)
                 }
                 emit('sub', id)

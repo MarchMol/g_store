@@ -1,13 +1,17 @@
 <script setup lang="ts">
 import NavBar from '@/components/NavBar.vue';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import type { Product } from '@/schemas/product.schema';
 import { getSingle } from '@/services/products.api';
 import 'primeicons/primeicons.css'
-import { decreaseCartItem, getCartSize, getItemCount, increaseCartItem, rewriteCartItem } from '@/services/cart.storage';
+import { getCartSize, getItemCount, rewriteCartItem } from '@/services/cart.storage';
 import AmountCustom from '@/components/AmountCustom.vue';
+import Loading from '@/components/Loading.vue';
+import ErrorMsg from '@/components/ErrorMsg.vue';
 
+const loading = ref(true)
+const errors =ref()
 const route = useRoute()
 const router = useRouter()
 const prod = ref<Product>()
@@ -29,6 +33,7 @@ const handleAddToCart = () =>{
 }
 
 onMounted(async () => {
+    loading.value= true
     cart_amount.value = getCartSize()
     try {
         prod.value = await getSingle(Number(route.params.id))
@@ -38,23 +43,19 @@ onMounted(async () => {
         }
         rate.value = prod.value.rating.rate
     } catch (err) {
-        console.log(err)
+        errors.value = err
+    } finally {
+        loading.value = false
     }
 })
 
 const handleAdd = () => {
     prod_amount.value += 1
-    // const pos_id = prod.value ? prod.value.id : 0
-    // increaseCartItem(pos_id)
-    // cart_amount.value = getCartSize()
 }
 
 const handleSub = () => {
     if (prod_amount.value > 0) {
         prod_amount.value -= 1
-        // const pos_id = prod.value ? prod.value.id : 0
-        // decreaseCartItem(pos_id)
-        // cart_amount.value = getCartSize()
     }
 }
 
@@ -66,7 +67,13 @@ const handleReturn = () => {
 
 <template>
     <NavBar :cart-amount="cart_amount" />
-    <div class="flex flex-col pb-[2rem]">
+    <div v-if="loading" class="flex justify-center text-4xl text-[var(--color-darker-gray)] pt-[2rem]">
+        <Loading />
+    </div>
+    <div v-else-if="errors" class="flex justify-center text-xl text-[var(--color-darker-gray)] pt-[2rem]">
+        <ErrorMsg/>
+    </div>
+    <div v-else class="flex flex-col pb-[2rem]">
           <div class="pl-[2rem] pt-[2rem] text-[1.5rem] text-[var(--color-dark-gray)] cursor-pointer">
             <i class="pi pi-angle-left" @click="handleReturn"></i>
         </div>
