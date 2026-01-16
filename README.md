@@ -8,7 +8,7 @@ A modern, fully-typed e-commerce application built with Vue 3, TypeScript, and V
 
 This project is deployed on Vercel for seamless continuous deployment.
 
-**Live Demo:** [G-Store](https://g-store-eta.vercel.app/)
+**Live Demo:** [G-Store](https://g-store-git-production-marchmols-projects-04a83ad4.vercel.app?_vercel_share=kRNdUyErqutTuh8LSnFGXaAxNpfk08fh)
 
 
 ## 📋 Table of Contents
