@@ -2,6 +2,15 @@
 
 A modern, fully-typed e-commerce application built with Vue 3, TypeScript, and Vite. The application features product browsing, filtering, shopping cart management, and is styled with Tailwind CSS.
 
+## Deployment
+
+### Vercel Deployment
+
+This project is deployed on Vercel for seamless continuous deployment.
+
+**Live Demo:** [G-Store](https://g-store-eta.vercel.app/)
+
+
 ## 📋 Table of Contents
 
 - [Features](#features)
